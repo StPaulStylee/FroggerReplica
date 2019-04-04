@@ -22,15 +22,25 @@ public class Player : MonoBehaviour
         float verticalMovement = Input.GetAxis("Vertical");
 
 		if (!hasJumped) {
+			Vector2 targetPosition = Vector2.zero;
+			bool tryingToMove = false;
+
 			// The frog didn't move
 			if (horizontalMovement != 0) {
-				transform.position = new Vector2(transform.position.x + (horizontalMovement > 0 ? JumpDistance : -JumpDistance), transform.position.y);
+				tryingToMove = true;
+				targetPosition = new Vector2(transform.position.x + (horizontalMovement > 0 ? JumpDistance : -JumpDistance), transform.position.y);
+			}
+			else if (verticalMovement != 0) {
+				tryingToMove = true;
+				targetPosition = new Vector2(transform.position.x, transform.position.y + (verticalMovement > 0 ? JumpDistance : -JumpDistance));
+			}
+			Collider2D hitCollider = Physics2D.OverlapCircle(targetPosition, 0.1f);
+			// If our OverlapCircle method does not return anything, we can move
+			if (tryingToMove && hitCollider == null) {
+				transform.position = targetPosition;
 				hasJumped = true;
 			}
-			if (verticalMovement != 0) {
-				transform.position = new Vector2(transform.position.x, transform.position.y + (verticalMovement > 0 ? JumpDistance : -JumpDistance));
-				hasJumped = true;
-			}
+
 		} else {
 			if (horizontalMovement == 0f && verticalMovement == 0f) {
 				hasJumped = false;
