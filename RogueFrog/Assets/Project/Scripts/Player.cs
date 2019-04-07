@@ -6,6 +6,10 @@ public class Player : MonoBehaviour
 {
 	// The size of a tile
 	public float JumpDistance = 0.32f;
+	// Events
+	public delegate void PlayerHandler( );
+	public event PlayerHandler OnPlayerMoved;
+	public event PlayerHandler OnPlayerEscaped;
 
 	private bool hasJumped;
 	private Vector3 startingPosition;
@@ -35,10 +39,15 @@ public class Player : MonoBehaviour
 				targetPosition = new Vector2(transform.position.x, transform.position.y + (verticalMovement > 0 ? JumpDistance : -JumpDistance));
 			}
 			Collider2D hitCollider = Physics2D.OverlapCircle(targetPosition, 0.1f);
-			// If our OverlapCircle method does not return anything, we can move
-			if (tryingToMove && hitCollider == null) {
+			// If our OverlapCircle method does not return anything or it does not return an enemy, we can move
+			if (tryingToMove && (hitCollider == null || hitCollider.GetComponent<Enemy>( ) != null)) {
 				transform.position = targetPosition;
 				hasJumped = true;
+				// Here, we check if anyone wants to know if the player has moved (the GameController, in this instance)
+				// and if they do, we signal that the player has moved
+				if (OnPlayerMoved != null) {
+					OnPlayerMoved( );
+				}
 			}
 
 		} else {
@@ -57,6 +66,9 @@ public class Player : MonoBehaviour
 		// Top bound - Notice that we are moving the frog back to it's starting position
 		if (transform.position.y > (Screen.height / 100f) / 2f) {
 			transform.position = startingPosition;
+			if (OnPlayerEscaped != null) {
+				OnPlayerEscaped( );
+			}
 		}
 		// Left Bound
 		if (transform.position.x < -(Screen.width / 100f) / 2f) {
@@ -65,6 +77,13 @@ public class Player : MonoBehaviour
 		// Right bound
 		if (transform.position.x > (Screen.width / 100f) / 2f) {
 			transform.position = new Vector2(transform.position.x - JumpDistance, transform.position.y);
+		}
+	}
+
+	private void OnTriggerEnter2D(Collider2D collision) 
+	{
+		if (collision.GetComponent<Enemy>( ) != null) {
+			Destroy(gameObject);
 		}
 	}
 }
