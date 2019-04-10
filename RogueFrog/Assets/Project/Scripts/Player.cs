@@ -42,6 +42,7 @@ public class Player : MonoBehaviour
 			// If our OverlapCircle method does not return anything or it does not return an enemy, we can move
 			if (tryingToMove && (hitCollider == null || hitCollider.GetComponent<Enemy>( ) != null)) {
 				transform.position = targetPosition;
+				GetComponent<AudioSource>( ).Play( );
 				hasJumped = true;
 				// Here, we check if anyone wants to know if the player has moved (the GameController, in this instance)
 				// and if they do, we signal that the player has moved
