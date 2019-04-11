@@ -43,9 +43,9 @@ public class GameController : MonoBehaviour
 		highestPosition = player.transform.position.y;
 		level++;
 		LevelText.text = "Level: " + level;
-		foreach (Enemy enemy in GetComponentsInChildren<Enemy>( )) {
-			enemy.Speed *= DifficultyMultiplier;
-		}
+		//foreach (EnemyRow enemyRow in GetComponentsInChildren<EnemyRow>( )) {
+		//	enemyRow.Speed *= DifficultyMultiplier;
+		//}
 	}
 
 	private void OnPlayerMoved( )

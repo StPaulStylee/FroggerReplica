@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-	public float Speed = 1f;
+	// 10 Enemy Rows; 23 enemies per row
+
+	//public float Speed = 1f;
     // Start is called before the first frame update
     void Start()
     {
 		// If you want to test different speeds during gameplay you will need to have this called in Update()
-		GetComponent<Rigidbody2D>( ).velocity = new Vector2(Speed, 0);
+		//float velocityDeterminator = Random.value;
+		//GetComponent<Rigidbody2D>( ).velocity = new Vector2(velocityDeterminator > 0.5f ? Speed : -Speed, 0 );
 	}
 
 	// Update is called once per frame
