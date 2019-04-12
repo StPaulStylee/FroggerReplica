@@ -12,6 +12,8 @@ public class GameController : MonoBehaviour
 	public Text GameOverText;
 	public float DifficultyMultiplier = 1.2f;
 
+	[SerializeField]
+	private EnemyRow[ ] enemyRows;
 	private float highestPosition;
 	private int score = 0;
 	private int level = 1;
@@ -46,6 +48,12 @@ public class GameController : MonoBehaviour
 		//foreach (EnemyRow enemyRow in GetComponentsInChildren<EnemyRow>( )) {
 		//	enemyRow.Speed *= DifficultyMultiplier;
 		//}
+		if (enemyRows != null) {
+			foreach (EnemyRow row in enemyRows) {
+				ResetActiveEnemies(row, 0.2f);
+				row.SetChildrenVelocity( );
+			}
+		}
 	}
 
 	private void OnPlayerMoved( )
@@ -54,6 +62,13 @@ public class GameController : MonoBehaviour
 			highestPosition = player.transform.position.y;
 			score++;
 			ScoreText.text = "Score: " + score;
+		}
+	}
+
+	private void ResetActiveEnemies(EnemyRow enemyRow, float keepActivePercentage ) {
+		foreach (Enemy enemy in enemyRow.GetComponentsInChildren<Enemy>(true)) {
+			enemy.gameObject.SetActive(true);
+			enemy.SetEnemyToInactive(keepActivePercentage);
 		}
 	}
 }
