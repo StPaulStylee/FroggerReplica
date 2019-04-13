@@ -26,6 +26,8 @@ public class GameController : MonoBehaviour
 
 		highestPosition = player.transform.position.y;
 		GameOverText.gameObject.SetActive(false);
+
+		SetEnemiesOnLevel(0.2f);
     }
 
     // Update is called once per frame
@@ -45,15 +47,7 @@ public class GameController : MonoBehaviour
 		highestPosition = player.transform.position.y;
 		level++;
 		LevelText.text = "Level: " + level;
-		//foreach (EnemyRow enemyRow in GetComponentsInChildren<EnemyRow>( )) {
-		//	enemyRow.Speed *= DifficultyMultiplier;
-		//}
-		if (enemyRows != null) {
-			foreach (EnemyRow row in enemyRows) {
-				ResetActiveEnemies(row, 0.2f);
-				row.SetChildrenVelocity( );
-			}
-		}
+		SetEnemiesOnLevel(0.2f);
 	}
 
 	private void OnPlayerMoved( )
@@ -65,10 +59,33 @@ public class GameController : MonoBehaviour
 		}
 	}
 
-	private void ResetActiveEnemies(EnemyRow enemyRow, float keepActivePercentage ) {
+	private void InactivateEnemiesByPercentage(EnemyRow enemyRow, float keepActivePercentage ) {
 		foreach (Enemy enemy in enemyRow.GetComponentsInChildren<Enemy>(true)) {
-			enemy.gameObject.SetActive(true);
-			enemy.SetEnemyToInactive(keepActivePercentage);
+			float inactiveDeterminator = Random.value;
+			if (inactiveDeterminator > keepActivePercentage) {
+				enemy.gameObject.SetActive(false);
+			}
 		}
 	}
+
+	/// <summary>
+	/// Set's the state of every enemy in each row to 'active'.
+	/// </summary>
+	/// <param name="enemyRow"></param>
+	private void SetAllEnemiesToActive(EnemyRow enemyRow) {
+		foreach (Enemy enemy in enemyRow.GetComponentsInChildren<Enemy>(true)) {
+			enemy.gameObject.SetActive(true);
+		}
+	}
+
+	private void SetEnemiesOnLevel(float keepActivePercentage) {
+		if (enemyRows != null) {
+			foreach (EnemyRow row in enemyRows) {
+				SetAllEnemiesToActive(row);
+				InactivateEnemiesByPercentage(row, keepActivePercentage);
+				row.SetChildrenVelocity( );
+			}
+		}
+	}
+
 }

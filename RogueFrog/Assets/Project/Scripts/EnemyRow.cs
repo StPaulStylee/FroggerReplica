@@ -6,7 +6,6 @@ public class EnemyRow : MonoBehaviour
 {
 	void Start()
     {
-		SetChildrenVelocity( );
 	}
 
 	// Update is called once per frame

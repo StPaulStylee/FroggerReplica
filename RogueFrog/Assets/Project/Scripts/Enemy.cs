@@ -10,13 +10,7 @@ public class Enemy : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
     {
-		SetEnemyToInactive(0.2f);
-		// If you want to test different speeds during gameplay you will need to have this called in Update()
-		//float velocityDeterminator = Random.value;
-		//if (velocityDeterminator > 0.2f) {
-		//	gameObject.SetActive(false);
-		//}
-		//GetComponent<Rigidbody2D>( ).velocity = new Vector2(velocityDeterminator > 0.5f ? Speed : -Speed, 0);
+
 	}
 
 	// Update is called once per frame
